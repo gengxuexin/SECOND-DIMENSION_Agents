@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>服装店智能运营 · 多 Agent 助手</title>
+  <!-- AdminLTE 4.10.1 (MIT) https://github.com/ColorlibHQ/AdminLTE -->
+  <link rel="stylesheet" href="assets/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/vendor/overlayscrollbars.min.css">
+  <link rel="stylesheet" href="assets/vendor/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="vendor/AdminLTE/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="assets/app.css">
+</head>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+
+<div class="app-wrapper">
+  <!-- ============ 侧边栏 ============ -->
+  <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <div class="sidebar-brand">
+      <a href="#chat" class="brand-link">
+        <i class="bi bi-shop brand-image opacity-75 ms-3 me-2"></i>
+        <span class="brand-text fw-light">服装店 Agent</span>
+      </a>
+    </div>
+    <div class="sidebar-wrapper">
+      <nav class="mt-2">
+        <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation">
+          <li class="nav-header">智能运营</li>
+          <li class="nav-item">
+            <a href="#chat" class="nav-link active" data-page="chat">
+              <i class="nav-icon bi bi-chat-dots"></i>
+              <p>Agent 对话<i class="nav-arrow bi bi-chevron-right"></i></p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#dashboard" class="nav-link" data-page="dashboard">
+              <i class="nav-icon bi bi-speedometer2"></i>
+              <p>运营看板<i class="nav-arrow bi bi-chevron-right"></i></p>
+            </a>
+          </li>
+          <li class="nav-header">工具层直调</li>
+          <li class="nav-item">
+            <a href="#archive" class="nav-link" data-page="archive">
+              <i class="nav-icon bi bi-image"></i>
+              <p>图像归档<i class="nav-arrow bi bi-chevron-right"></i></p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#comments" class="nav-link" data-page="comments">
+              <i class="nav-icon bi bi-chat-square-text"></i>
+              <p>评论洞察<i class="nav-arrow bi bi-chevron-right"></i></p>
+            </a>
+          </li>
+          <li class="nav-header">V3 可信治理</li>
+          <li class="nav-item">
+            <a href="#governance" class="nav-link" data-page="governance">
+              <i class="nav-icon bi bi-shield-check"></i>
+              <p>治理与评测<i class="nav-arrow bi bi-chevron-right"></i></p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#trace" class="nav-link" data-page="trace">
+              <i class="nav-icon bi bi-diagram-3"></i>
+              <p>链路轨迹<i class="nav-arrow bi bi-chevron-right"></i></p>
+            </a>
+          </li>
+          <li class="nav-header">业务数据</li>
+          <li class="nav-item">
+            <a href="#products" class="nav-link" data-page="products">
+              <i class="nav-icon bi bi-box-seam"></i>
+              <p>商品与标签<i class="nav-arrow bi bi-chevron-right"></i></p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="sidebar-footer p-3 border-top">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <small class="text-secondary d-block">编排后端</small>
+          <strong class="small text-light" id="llmBadge">检测中…</strong>
+        </div>
+        <span class="badge text-bg-secondary" id="svcBadge">—</span>
+      </div>
+      <small class="text-secondary d-block mt-2">模型服务</small>
+      <div class="mt-1" id="svcList"><small class="text-secondary">—</small></div>
+    </div>
+  </aside>
+
+  <!-- ============ 顶栏 ============ -->
+  <nav class="app-header navbar navbar-expand bg-body">
+    <div class="container-fluid">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button" aria-label="切换侧边栏">
+            <i class="bi bi-list"></i>
+          </a>
+        </li>
+        <li class="nav-item d-none d-md-block">
+          <a href="#" class="nav-link">
+            <i class="nav-icon bi bi-house-door"></i>
+            <p class="d-none d-lg-inline" id="pageTitle">Agent 对话</p>
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <span class="nav-link" id="clock"><i class="bi bi-clock"></i></span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="refreshBtn" title="刷新当前页">
+            <i class="bi bi-arrow-clockwise"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-lte-toggle="fullscreen" href="#" role="button">
+            <i class="bi bi-fullscreen"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============ 内容区 ============ -->
+  <main class="app-main">
+    <div class="app-content-header">
+      <div class="container-fluid">
+        <h3 class="mb-0" id="pageHeading">Agent 对话</h3>
+        <small class="text-secondary" id="pageSub">用自然语言完成「图像归档 → 标签归一 → 评论洞察 → 运营建议」闭环</small>
+      </div>
+    </div>
+    <div class="app-content">
+      <div class="container-fluid">
+
+        <!-- 概览统计（所有页共用顶部） -->
+        <div class="row mb-3" id="statRow">
+          <div class="col-6 col-lg-3">
+            <div class="card"><div class="card-body">
+              <div class="text-secondary small">商品数</div>
+              <div class="h3 mb-0" id="statProducts">—</div>
+            </div></div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="card"><div class="card-body">
+              <div class="text-secondary small">评论数</div>
+              <div class="h3 mb-0" id="statComments">—</div>
+            </div></div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="card"><div class="card-body">
+              <div class="text-secondary small">低库存 SKU</div>
+              <div class="h3 mb-0 text-warning" id="statLow">—</div>
+            </div></div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="card"><div class="card-body">
+              <div class="text-secondary small">历史任务</div>
+              <div class="h3 mb-0" id="statTasks">—</div>
+            </div></div>
+          </div>
+        </div>
+
+        <!-- ========== 页面：Agent 对话 ========== -->
+        <div class="page" id="page-chat">
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="card card-primary card-outline">
+                <div class="card-header">
+                  <h3 class="card-title"><i class="bi bi-robot me-1"></i>对话</h3>
+                  <div class="card-tools">
+                    <button class="btn btn-sm btn-outline-secondary" id="clearChat">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body p-0">
+                  <div class="direct-chat-messages" id="chatLog"
+                       style="height:460px;overflow-y:auto;padding:1rem;background:var(--bs-tertiary-bg)">
+                    <div class="text-center text-secondary small py-5">
+                      <i class="bi bi-stars fs-2 d-block mb-2"></i>
+                      试试：「根据评论和库存给我一些选品建议」
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="chatInput"
+                             placeholder="描述你的运营需求，回车发送…">
+                      <select class="form-select" id="chatScope" style="max-width:130px">
+                        <option value="all">全店评论</option>
+                      </select>
+                      <button class="btn btn-primary" id="sendBtn">
+                        <i class="bi bi-send"></i>
+                      </button>
+                    </div>
+                    <div class="mt-2 d-flex gap-2 flex-wrap">
+                      <span class="badge text-bg-light border quick-q" data-q="根据评论和库存给我一些选品建议">选品建议</span>
+                      <span class="badge text-bg-light border quick-q" data-q="看看最近评论里尺码、颜色、质量有什么问题">评论问题</span>
+                      <span class="badge text-bg-light border quick-q" data-q="帮我把这批新上的衣服图片归一下类">图片归类</span>
+                      <span class="badge text-bg-light border quick-q" data-q="连衣裙的差评主要集中在什么">单品类</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="card mb-3">
+                <div class="card-header"><h3 class="card-title"><i class="bi bi-lightning-charge me-1"></i>执行轨迹</h3></div>
+                <div class="card-body p-0" style="max-height:240px;overflow-y:auto">
+                  <ul class="list-group list-group-flush" id="traceMini">
+                    <li class="list-group-item text-secondary small">等待任务…</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header"><h3 class="card-title"><i class="bi bi-shield-check me-1"></i>治理状态</h3></div>
+                <div class="card-body" id="govMini">
+                  <div class="text-secondary small">等待任务…</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== 页面：运营看板 ========== -->
+        <div class="page d-none" id="page-dashboard">
+          <div class="row">
+            <div class="col-lg-7">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">各品类评论情感分布</h3></div>
+                <div class="card-body"><canvas id="chartSentiment" height="260"></canvas></div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">低库存预警</h3></div>
+                <div class="card-body table-responsive">
+                  <table class="table table-sm table-hover align-middle mb-0">
+                    <thead><tr><th>商品</th><th>品类</th><th class="text-end">库存</th><th class="text-end">定价</th></tr></thead>
+                    <tbody id="lowStockBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== 页面：图像归档 ========== -->
+        <div class="page d-none" id="page-archive">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title"><i class="bi bi-cloud-arrow-up me-1"></i>上传服装图片（V1 单 Agent 工具化）</h3>
+            </div>
+            <div class="card-body">
+              <div class="row g-3 align-items-end">
+                <div class="col-md-6">
+                  <label class="form-label">选择图片</label>
+                  <input type="file" class="form-control" id="imgInput" multiple accept="image/*">
+                  <small class="text-secondary">也可直接用内置样例图（不选即用样例）</small>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Top-K</label>
+                  <select class="form-select" id="topK">
+                    <option>3</option><option>2</option><option>5</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-primary w-100" id="classifyBtn">
+                    <i class="bi bi-magic me-1"></i>开始识别
+                  </button>
+                </div>
+              </div>
+              <div class="mt-3 d-flex gap-2 flex-wrap" id="uploadPreview"></div>
+            </div>
+            <div class="card-body pt-0" id="classifyResult"></div>
+          </div>
+        </div>
+
+        <!-- ========== 页面：评论洞察 ========== -->
+        <div class="page d-none" id="page-comments">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">评论洞察（V2 多 Agent 闭环）</h3>
+              <div class="card-tools">
+                <select class="form-select form-select-sm" id="insightScope" style="width:140px">
+                  <option value="all">全店</option>
+                </select>
+                <button class="btn btn-sm btn-primary ms-2" id="insightBtn">
+                  <i class="bi bi-play me-1"></i>运行
+                </button>
+              </div>
+            </div>
+            <div class="card-body" id="insightResult">
+              <div class="text-secondary small">选择范围后点击「运行」，将调用 analyze_comments 工具批量打分并按品类聚合主题。</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== 页面：治理与评测 ========== -->
+        <div class="page d-none" id="page-governance">
+          <div class="row">
+            <div class="col-lg-7">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">评测回归（V3）</h3>
+                  <div class="card-tools">
+                    <button class="btn btn-sm btn-primary" id="evalBtn">
+                      <i class="bi bi-play-circle me-1"></i>运行评测
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body" id="evalResult">
+                  <div class="text-secondary small">评测集覆盖：意图路由 / 标签归一 / 评论主题召回 / 建议证据闭环 / 工具参数安全。</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="card mb-3">
+                <div class="card-header"><h3 class="card-title">人工修正回流样本池</h3></div>
+                <div class="card-body table-responsive" style="max-height:260px;overflow-y:auto">
+                  <table class="table table-sm mb-0 align-middle">
+                    <thead><tr><th>类型</th><th>决策</th><th>修正值</th></tr></thead>
+                    <tbody id="sampleBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">置信度分流说明</h3></div>
+                <div class="card-body small text-secondary">
+                  <p class="mb-2">- 标签归一置信度 &lt; 0.65 → 转人工确认</p>
+                  <p class="mb-2">- 单条证据的主题 → 归纳风险高，人工复核</p>
+                  <p class="mb-0">- 建议置信度 &lt; 0.60 或无证据 → 不自动采信</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== 页面：链路轨迹 ========== -->
+        <div class="page d-none" id="page-trace">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">全链路轨迹</h3>
+              <div class="card-tools">
+                <select class="form-select form-select-sm" id="traceSelect" style="width:260px"></select>
+              </div>
+            </div>
+            <div class="card-body" id="traceDetail">
+              <div class="text-secondary small">每次工具调用、每次人工介入都会落痕，保证结果可追溯。</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== 页面：商品与标签 ========== -->
+        <div class="page d-none" id="page-products">
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">商品表</h3></div>
+            <div class="card-body table-responsive" style="max-height:460px;overflow-y:auto">
+              <table class="table table-sm table-striped table-hover align-middle mb-0">
+                <thead><tr><th>SKU</th><th>名称</th><th>品类</th><th>款式</th><th>颜色</th><th class="text-end">价格</th><th class="text-end">库存</th><th>上架</th></tr></thead>
+                <tbody id="productBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card mt-3">
+            <div class="card-header"><h3 class="card-title">标准标签库（归一目标）</h3></div>
+            <div class="card-body"><div id="tagCloud"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="float-end d-none d-sm-inline">前端：AdminLTE 4.10.1 (MIT)　·　后端：Python 标准库 http.server</div>
+    <strong>服装门店与网店智能运营多 Agent 助手</strong>　·　LLM 负责理解与编排，模型负责判定，人工保留确认权
+  </footer>
+</div>
+
+<script src="assets/vendor/overlayscrollbars.es6.min.js"></script>
+<script src="assets/vendor/popper.min.js"></script>
+<script src="assets/vendor/bootstrap.min.js"></script>
+<script src="vendor/AdminLTE/dist/js/adminlte.min.js"></script>
+<script src="assets/vendor/chart.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

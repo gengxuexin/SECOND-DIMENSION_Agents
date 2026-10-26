@@ -1,0 +1,113 @@
+/* ==========================================================================
+   业务样式：在 AdminLTE 之上做最小覆盖。
+   原则：只补 AdminLTE 没有的（Agent 消息流、轨迹时间线、证据徽章），
+        颜色一律用 Bootstrap 变量，随主题切换自动生效。
+   ========================================================================== */
+:root {
+  --agent-accent: #0d6efd;
+  --evid-bg: rgba(13, 110, 253, .10);
+}
+
+body { font-size: .9375rem; }
+
+/* ---------- Agent 消息流 ---------- */
+.msg { display: flex; gap: .6rem; margin-bottom: .9rem; align-items: flex-start; }
+.msg .avatar {
+  width: 32px; height: 32px; border-radius: 50%; flex: 0 0 32px;
+  display: grid; place-items: center; font-size: .9rem; color: #fff;
+}
+.msg.user .avatar { background: var(--bs-secondary); }
+.msg.bot .avatar { background: var(--agent-accent); }
+.msg .bubble {
+  background: var(--bs-body-bg); border: 1px solid var(--bs-border-color);
+  border-radius: .5rem; padding: .6rem .8rem; max-width: 82%;
+  box-shadow: .04rem .06rem .12rem rgba(0, 0, 0, .05);
+}
+.msg.user .bubble { background: var(--bs-tertiary-bg); }
+.msg .bubble .who { font-size: .75rem; color: var(--bs-secondary); margin-bottom: .25rem; }
+.msg .bubble pre {
+  background: var(--bs-tertiary-bg); padding: .6rem; border-radius: .35rem;
+  font-size: .8rem; overflow-x: auto; white-space: pre-wrap; margin: 0;
+}
+.msg .bubble h1, .msg .bubble h2, .msg .bubble h3 {
+  font-size: 1rem; margin: .6rem 0 .35rem; font-weight: 600;
+}
+.msg .bubble h1:first-child, .msg .bubble h2:first-child { margin-top: 0; }
+.msg .bubble h1 { font-size: 1.1rem; border-bottom: 1px solid var(--bs-border-color); padding-bottom: .3rem; }
+.msg .bubble table { font-size: .8rem; margin: .5rem 0; width: 100%; }
+.msg .bubble th, .msg .bubble td {
+  border: 1px solid var(--bs-border-color); padding: .3rem .45rem;
+}
+.msg .bubble th { background: var(--bs-tertiary-bg); }
+
+/* 打字指示 */
+.typing { display: inline-flex; gap: .25rem; align-items: center; }
+.typing span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--bs-secondary);
+  animation: blink 1.2s infinite;
+}
+.typing span:nth-child(2) { animation-delay: .2s; }
+.typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%, 60%, 100% { opacity: .25 } 30% { opacity: 1 } }
+
+/* ---------- 证据徽章 ---------- */
+.evid {
+  display: inline-block; background: var(--evid-bg); color: var(--agent-accent);
+  border-radius: .25rem; padding: 0 .32rem; font-size: .72rem;
+  margin: .1rem .12rem .1rem 0; font-family: var(--bs-font-monospace);
+}
+.tool-ref {
+  display: inline-block; background: var(--bs-tertiary-bg);
+  color: var(--bs-secondary); border-radius: .25rem; padding: 0 .32rem;
+  font-size: .72rem; margin: .1rem .12rem .1rem 0;
+  font-family: var(--bs-font-monospace);
+}
+
+/* ---------- 置信度条 ---------- */
+.conf-bar { height: 6px; border-radius: 3px; background: var(--bs-tertiary-bg); overflow: hidden; }
+.conf-bar > span { display: block; height: 100%; border-radius: 3px; }
+.conf-high { background: var(--bs-success); }
+.conf-mid { background: var(--bs-warning); }
+.conf-low { background: var(--bs-danger); }
+
+/* ---------- 建议卡片 ---------- */
+.advice-card { border-left: 3px solid var(--agent-accent); }
+.advice-card.p-高 { border-left-color: var(--bs-danger); }
+.advice-card.p-中 { border-left-color: var(--bs-warning); }
+.advice-card.p-低 { border-left-color: var(--bs-info); }
+
+/* ---------- 轨迹时间线 ---------- */
+.tl { position: relative; padding-left: 1.4rem; }
+.tl::before {
+  content: ''; position: absolute; left: .4rem; top: .3rem; bottom: .3rem;
+  width: 2px; background: var(--bs-border-color);
+}
+.tl-item { position: relative; margin-bottom: .75rem; }
+.tl-item::before {
+  content: ''; position: absolute; left: -1.15rem; top: .35rem;
+  width: .55rem; height: .55rem; border-radius: 50%;
+  background: var(--bs-secondary); border: 2px solid var(--bs-body-bg);
+}
+.tl-item.act-llm::before { background: var(--agent-accent); }
+.tl-item.act-tool::before { background: var(--bs-success); }
+.tl-item.act-human::before { background: var(--bs-warning); }
+.tl-item .tl-step { font-size: .75rem; color: var(--bs-secondary); }
+.tl-item .tl-detail { font-size: .82rem; word-break: break-word; }
+
+/* ---------- 徽章微调 ---------- */
+.badge { font-weight: 500; }
+.quick-q { cursor: pointer; }
+.quick-q:hover { background: var(--agent-accent) !important; color: #fff !important; }
+.tag-pill {
+  display: inline-block; background: var(--bs-tertiary-bg);
+  border: 1px solid var(--bs-border-color); border-radius: 1rem;
+  padding: .1rem .6rem; font-size: .78rem; margin: .1rem .2rem .1rem 0;
+}
+.upthumb {
+  width: 54px; height: 54px; object-fit: cover; border-radius: .35rem;
+  border: 1px solid var(--bs-border-color);
+}
+#chatLog::-webkit-scrollbar, .card-body::-webkit-scrollbar { width: 6px; }
+#chatLog::-webkit-scrollbar-thumb, .card-body::-webkit-scrollbar-thumb {
+  background: var(--bs-border-color); border-radius: 3px;
+}

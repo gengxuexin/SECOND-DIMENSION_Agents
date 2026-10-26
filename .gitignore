@@ -1,0 +1,19 @@
+# 运行时产物（可重新生成，不进版本库）
+var/
+data/uploads/
+__pycache__/
+*.pyc
+.idea/
+*.log
+
+# 大文件模型权重（用 scripts/download_siglip.py 重新下载）
+var/siglip_fashion/*.safetensors
+var/siglip_fashion/*.bin
+var/fashion_cnn.pt
+
+# 本地文档
+面试讲稿.md
+下载清单.md
+
+# 大数据集（用 scripts/download_fashion_mnist.py 重新下载）
+data/fashion_mnist/*.gz

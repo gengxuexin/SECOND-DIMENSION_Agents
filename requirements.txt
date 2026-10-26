@@ -1,0 +1,29 @@
+#"""项目依赖。
+#
+#最小可运行集（不装也能跑，代码内有降级分支）：
+#    pip install pydantic
+#
+#推荐（启用图像特征提取与样例图生成）：
+#    pip install pillow
+#
+#接入真实模型时再按需安装：
+#    pip install torch torchvision          # ResNet50 迁移学习 / TorchScript 推理
+#    pip install transformers datasets     # BERT+CNN+Attention 情感多标签微调
+#    pip install flask gunicorn            # 按简历口径用 Flask 替代内置 http.server
+#"""
+# 必需
+pydantic>=2.5
+
+# 推荐
+pillow>=10.0
+
+# 真实模型训练/推理时安装
+# torch>=2.0
+# torchvision>=0.15
+# transformers>=4.40
+# datasets>=2.18
+# scikit-learn>=1.3
+
+# 服务化（可选，内置 http.server 已够本地演示）
+# flask>=3.0
+# gunicorn>=21.2

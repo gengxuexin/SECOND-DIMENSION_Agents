@@ -1,0 +1,12 @@
+{"id": "E-001", "kind": "intent", "input": "帮我把这几张新上的衣服图片归一下类", "expect": {"intent": "image_archive"}, "note": "V2 图像归档意图路由"}
+{"id": "E-002", "kind": "intent", "input": "最近网店差评里尺码和起球问题多吗", "expect": {"intent": "comment_insight"}, "note": "评论洞察意图路由"}
+{"id": "E-003", "kind": "intent", "input": "根据评论和库存给我一些选品建议", "expect": {"intent": "advice"}, "note": "运营建议意图路由"}
+{"id": "E-004", "kind": "tag_norm", "input": "裙子", "expect": {"normalized": "连衣裙", "need_confirm": false}, "note": "别名归一"}
+{"id": "E-005", "kind": "tag_norm", "input": "短袖", "expect": {"normalized": "T恤", "need_confirm": false}, "note": "别名归一"}
+{"id": "E-006", "kind": "tag_norm", "input": "卫衣", "expect": {"normalized": "毛衣", "need_confirm": false}, "note": "别名归一"}
+{"id": "E-007", "kind": "tag_norm", "input": "羽绒外套", "expect": {"normalized": "羽绒服", "need_confirm": false}, "note": "多词歧义归一"}
+{"id": "E-008", "kind": "comment_topic", "input": "尺码偏小，建议拍大一码", "expect": {"topics_include": ["尺码"], "sentiment": "negative"}, "note": "长尾主题召回"}
+{"id": "E-009", "kind": "comment_topic", "input": "色差太严重了，面料还有起球", "expect": {"topics_include": ["颜色", "质量"], "sentiment": "negative"}, "note": "多主题共存"}
+{"id": "E-010", "kind": "comment_topic", "input": "面料舒服不褪色，比想象中好，会回购", "expect": {"sentiment": "positive"}, "note": "正面情感"}
+{"id": "E-011", "kind": "advice_evidence", "input": "根据评论和库存给我一些选品建议", "expect": {"min_advice": 1, "require_evidence": true}, "note": "建议必须带证据（防幻觉硬约束）"}
+{"id": "E-012", "kind": "tool_args", "input": "analyze_comments", "expect": {"tool": "analyze_comments", "forbidden_args": ["system", "prompt", "role"]}, "note": "工具参数白名单"}
