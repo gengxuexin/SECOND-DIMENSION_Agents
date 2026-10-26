@@ -17,3 +17,4 @@ var/fashion_cnn.pt
 
 # 大数据集（用 scripts/download_fashion_mnist.py 重新下载）
 data/fashion_mnist/*.gz
+README.md
